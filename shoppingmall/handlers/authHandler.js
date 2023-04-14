@@ -39,7 +39,7 @@ const joinProcess = (req, res) => {
                     getDateTime(new Date()), getDateTime(new Date()), '돌', 0, 0];
       pool.query(sql, values, (err, rows, field)=>{
         if(err) throw err;
-          res.render("joinProcess.html", {userName : req.body.userName}) 
+          res.render('message.html', {message : "가입되었습니다."}); 
       })
       // 개인 장바구니 테이블 생성  
     }
@@ -50,7 +50,7 @@ const joinProcess = (req, res) => {
 
 const logout = (req, res)=>{ 
   req.session.destroy();
-  res.redirect('/');
+  res.render('message.html', {message : "로그아웃되었습니다."});
 }
 
 const withdrawal = (req, res)=>{ res.send('회원탈퇴'); }

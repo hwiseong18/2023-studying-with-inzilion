@@ -27,11 +27,11 @@ const userEdit = (req, res) => {
       pool.query(sql, values, (err, field)=>{
         if(err) throw err;
         let msg = '수정완료';
-        res.render('message.html', {message : msg});
+        res.render('message.html', {message : msg, user:req.session.user});
       })
     } else {
       let msg = '비밀번호가 일치하지 않습니다.';
-      res.render('message.html', {message : msg});
+      res.render('message.html', {message : msg, user:req.session.user});
     }
   })  
 }

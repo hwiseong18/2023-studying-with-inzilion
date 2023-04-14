@@ -1,0 +1,16 @@
+{% extends "index.html" %}
+
+{% block mid %}
+  <div class="card-body">
+    <h3 class="modal-title fs-5">카테고리가 {{ product[0].category }}인 상세정보</h3>
+    {% for p in product %}
+      <table class="table table-striped">
+        <tr><td>상품명</td><td>{{ p.name }}</td></tr>
+        <tr><td>가격</td><td>{{ p.price }}</td></tr>
+        <tr><td>등록일</td><td>{{p.registrationDate}}</td></tr>
+        <tr><td>상품이미지</td><td>{{ p.img}}</td></tr>
+        <tr><td>판매자</td><td>{{ p.seller}}</td></tr>
+      </table>
+      {% endfor %}
+  </div>
+{% endblock %}

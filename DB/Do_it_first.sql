@@ -37,8 +37,9 @@ CREATE TABLE category (
   name                VARCHAR(30) NOT NULL,
   PRIMARY KEY(idcategory));
 
-INSERT INTO category (name) VALUES ('전자기기');
-INSERT INTO category (name) VALUES ('식품');
+INSERT INTO category (name) VALUES ('안먹는거');
+INSERT INTO category (name) VALUES ('먹는거');
+INSERT INTO category (name) VALUES ('기타등등');
 
 CREATE TABLE products (
   idproducts          INT NOT NULL AUTO_INCREMENT,
@@ -53,6 +54,6 @@ CREATE TABLE products (
 INSERT INTO products (category, name, price, registrationDate, seller) 
       VALUES (1, '아이패드 프로' , 1000000, '2023-04-11 00:00:00', 'tester');
 INSERT INTO products (category, name, price, registrationDate, seller) 
-      VALUES (1, '갤럭시텝 플러스' , 570000, '2023-04-11 00:00:00', 'tester');
+      VALUES (1, '갤럭시탭 플러스' , 570000, '2023-04-11 00:00:00', 'tester');
 INSERT INTO products (category, name, price, registrationDate, seller) 
       VALUES (2, '양갈비 1Kg' , 40000, '2023-04-11 00:00:00', 'jwj');
