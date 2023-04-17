@@ -36,11 +36,15 @@ const userEdit = (req, res) => {
   })  
 }
 
-const Cart = (req, res) => {
-  let sql = 'SELECT * FROM ?Cart';
+const cart = (req, res) => {
+  let sql = `SELECT * FROM carts AS A LEFT JOIN products AS B ON A.productID = B.idproducts
+            UNION SELECT * FROM carts AS A RIGHT JOIN products AS B on A.productID = B.idproducts 
+            WHERE A.customerID=?`;
+  
   values = [req.session.user.id];
   pool.query(sql, values, (err, rows, field)=>{
     if(err) throw err;
+    console.log(rows);
     res.render('cart.html', {user : req.session.user, products : rows})
   })
 }
@@ -49,5 +53,5 @@ module.exports = {
   index,
   userID,
   userEdit,
-  Cart,
+  cart,
 }

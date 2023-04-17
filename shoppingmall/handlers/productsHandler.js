@@ -5,7 +5,7 @@ const getDateTime = (d) => getDate(d) + ' ' + getTime(d);
 
 
 const list = (req, res)=>{
-  let sql = `SELECT idproducts, name, price, DATE_FORMAT(registrationDate, '%y-%m-%d') AS date, seller From products`;
+  let sql = `SELECT idproducts, name, price, quantity, DATE_FORMAT(registrationDate, '%y-%m-%d') AS date, seller From products`;
   pool.query(sql, (err, rows, field)=>{
     res.render('productsList.html', { products: rows, user : req.session.user});
   })  
@@ -48,13 +48,6 @@ const productClass = (req, res)=>{
   pool.query(sql, values, (err, rows, field)=>{
     res.render('productsList.html', { products: rows, user : req.session.user});
   }) 
-
-  // let sql = `SELECT * FROM products WHERE category = ?`;
-  // let values = [req.params.productClass];
-  // pool.query(sql, values, (err, rows, field)=>{
-  //   if(err) throw err;
-  //   res.render('productClass.html', {product : rows, user : req.session.user});
-  // })
 }
 
 
