@@ -28,7 +28,7 @@ const registrationProcess = (req, res) => {
                   getDateTime(new Date()), req.body.productImg, req.session.user.id];
     pool.query(sql, values, (err, rows, field)=>{
       if(err) throw err;
-        res.render("message.html", {message : "상품등록됨"}) 
+        res.render("message.html", {message : "상품등록됨", user : req.session.user}) 
     })
   }
 }
@@ -43,12 +43,18 @@ const productNum = (req, res)=>{
 }
 
 const productClass = (req, res)=>{
-  let sql = `SELECT * FROM products WHERE category = ?`;
-  let values = [req.params.productClass];
+  let sql = `SELECT idproducts, name, price, DATE_FORMAT(registrationDate, '%y-%m-%d') AS date, seller From products WHERE category = ?`;
+  values = [req.params.productClass];
   pool.query(sql, values, (err, rows, field)=>{
-    if(err) throw err;
-    res.render('productClass.html', {product : rows, user : req.session.user});
-  })
+    res.render('productsList.html', { products: rows, user : req.session.user});
+  }) 
+
+  // let sql = `SELECT * FROM products WHERE category = ?`;
+  // let values = [req.params.productClass];
+  // pool.query(sql, values, (err, rows, field)=>{
+  //   if(err) throw err;
+  //   res.render('productClass.html', {product : rows, user : req.session.user});
+  // })
 }
 
 

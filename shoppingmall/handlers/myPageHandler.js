@@ -36,8 +36,18 @@ const userEdit = (req, res) => {
   })  
 }
 
+const Cart = (req, res) => {
+  let sql = 'SELECT * FROM ?Cart';
+  values = [req.session.user.id];
+  pool.query(sql, values, (err, rows, field)=>{
+    if(err) throw err;
+    res.render('cart.html', {user : req.session.user, products : rows})
+  })
+}
+
 module.exports = {
   index,
   userID,
   userEdit,
+  Cart,
 }

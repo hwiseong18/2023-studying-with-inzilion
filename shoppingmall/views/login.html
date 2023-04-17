@@ -1,5 +1,8 @@
 <div class="me-auto mb-2 mb-lg-0 me-2">
   {% if user %}  
+    <button type="button" class="btn btn-outline-warning" onclick="location.href='/myPage/{{user.id}}/cart'">
+      Cart
+    </button>
     <button type="button" class="btn btn-outline-success" onclick="location.href='/myPage/{{user.id}}'">
       {{ user.name }}
     </button>
