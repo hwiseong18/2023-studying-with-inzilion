@@ -60,7 +60,7 @@ CREATE TABLE carts (
       idcarts             INT NOT NULL AUTO_INCREMENT,
       customerID          VARCHAR(20) NOT NULL,
       productID           INT NOT NULL,
-      quantity            INT NOT NULL,
+      cartQuantity        INT NOT NULL,
       PRIMARY KEY(idcarts));
 
 INSERT INTO carts (customerID, productID, quantity) VALUES ('tester', 1, 2);

@@ -1,0 +1,24 @@
+{% extends "index.html" %}
+{% block mid %} 
+
+<table class="table table-striped text-center">
+  <th>선택</th>
+  <th>상품이름</th>
+  <th>가격</th>
+  <th>수량</th>
+  {% for product in products %}
+  <tr>
+    <td>
+      <div class="form-check text-center">
+        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+      </div>
+    </td>
+    <td><a href="/products/{{product.idproducts}}">{{ product.name }}</a></td>
+    <td class="text-end">{{ product.price }}</td>
+    <td class="text-end"><input type="number" min="1" value="{{ product.cartQuantity }}"></td>
+  </tr>
+  {% endfor %}
+</table>
+
+
+{% endblock %}

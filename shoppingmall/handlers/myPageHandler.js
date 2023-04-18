@@ -49,9 +49,20 @@ const cart = (req, res) => {
   })
 }
 
+const cartProcess = (req,res)=>{
+  let sql = 'INSERT INTO carts (customerID, productID, cartQuantity) VALUES (?, ?, ?)'
+  let values = [req.session.user.id, req.body.productID, req.body.quantity];
+  pool.query(sql, values, (err, rows, fields)=>{
+    if(err) throw err;
+    res.render('message.html', {message:"장바구니에 추가되었습니다.", user:req.session.user})
+  })
+}
+
+
 module.exports = {
   index,
   userID,
   userEdit,
   cart,
+  cartProcess,
 }
