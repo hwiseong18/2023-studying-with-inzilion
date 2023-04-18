@@ -1,4 +1,2 @@
 // 상황별 메시지 박스 컬러 변경
-
-myPageHandler
-authHandler
+// 카트에서 삭제할 때 생기는 오류

@@ -44,7 +44,6 @@ const cart = (req, res) => {
   values = [req.session.user.id];
   pool.query(sql, values, (err, rows, field)=>{
     if(err) throw err;
-    console.log(rows);
     res.render('cart.html', {user : req.session.user, products : rows})
   })
 }
@@ -58,6 +57,15 @@ const cartProcess = (req,res)=>{
   })
 }
 
+const cartDelete = (req,res)=>{
+  let sql = 'DELETE FROM carts WHERE idcarts IN (?)';
+  let values = [Object.keys(req.body)];
+
+  pool.query(sql, values, (err, rows, fields)=>{
+    if(err) throw err;
+    res.redirect(`/myPage/${req.session.user.id}/cart`);
+  })
+}
 
 module.exports = {
   index,
@@ -65,4 +73,5 @@ module.exports = {
   userEdit,
   cart,
   cartProcess,
+  cartDelete,
 }
