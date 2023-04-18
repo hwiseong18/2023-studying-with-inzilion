@@ -25,7 +25,7 @@ const registrationProcess = (req, res) => {
     let sql = 'INSERT INTO products (category, name, price, quantity, registrationDate, img, seller) ';
         sql += 'VALUES(?, ?, ?, ?, ?, ?, ?)';
     let values = [req.body.productCategory, req.body.productName, req.body.productPrice, req.body.productQuantity,
-                  getDateTime(new Date()), req.body.productImg, req.session.user.id];
+                  getDateTime(new Date()), req.file.filename, req.session.user.id];
     pool.query(sql, values, (err, rows, field)=>{
       if(err) throw err;
         res.render("message.html", {message : "상품등록됨", user : req.session.user}) 
