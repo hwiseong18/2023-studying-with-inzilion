@@ -44,12 +44,16 @@ const cart = (req, res) => {
   values = [req.session.user.id];
   pool.query(sql, values, (err, rows, field)=>{
     if(err) throw err;
-    res.render('cart.html', {user : req.session.user, products : rows})
+    let totalPrice = 0;
+    for(row of rows){
+      totalPrice += (row.price*row.cartsQuantity);
+    }
+    res.render('cart.html', {user : req.session.user, products : rows, total : totalPrice})
   })
 }
 
 const cartProcess = (req,res)=>{
-  let sql = 'INSERT INTO carts (customerID, productID, cartQuantity) VALUES (?, ?, ?)'
+  let sql = 'INSERT INTO carts (customerID, productID, cartsQuantity) VALUES (?, ?, ?)'
   let values = [req.session.user.id, req.body.productID, req.body.quantity];
   pool.query(sql, values, (err, rows, fields)=>{
     if(err) throw err;
