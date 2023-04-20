@@ -1,0 +1,32 @@
+{% extends "index.html" %}
+{% block mid %} 
+
+
+<form id="cartForm" method="post">
+    <table class="table table-striped text-center">
+
+        <th>상품이름</th>
+        <th>가격</th>
+        <th>수량</th>
+        {% for product in products %}
+        <tr>
+            <td><a href="/products/{{product.idproducts}}">{{ product.name }}</a></td>
+            <td class="price text-end">{{ product.price }}</td>
+            <td class="text-end">{{ product.quantity }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td></td>
+            <td>주문한 총 금액</td>
+            <td>{{ totalPrice }}</td>
+        </tr>
+    </table>
+    <div>
+        배송지 : {{ address }}
+    </div>
+    <button id="btnDelete" class="m-3 btn btn-success">결제</button><br>
+    <button id="btnDelete" class="m-3 btn btn-danger">취소</button><br>
+</form>
+
+
+{% endblock %}

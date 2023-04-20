@@ -63,12 +63,25 @@ const cartProcess = (req,res)=>{
 
 const cartDelete = (req,res)=>{
   let sql = 'DELETE FROM carts WHERE idcarts IN (?)';
-  let values = [Object.keys(req.body)];
-
+  let values = Object.keys(req.body)
+  values = [values.slice(0,values.length/2)];
   pool.query(sql, values, (err, rows, fields)=>{
     if(err) throw err;
     res.redirect(`/myPage/${req.session.user.id}/cart`);
   })
+}
+
+const cartOrder = (req,res)=>{
+  let sql = 'SELECT * FROM carts WHERE idcarts = (?)';
+  let values = Object.keys(req.body).slice(0,Object.keys(req.body).length/2);
+  pool.query(sql, values, (err, rows, fields)=>{
+    if(err) throw err;
+    
+  })
+  res.render('order.html', {user:req.session.user, 
+                            products : [{},{},{}],
+                            address : "짭주소", 
+                            totalPrice : req.body.totalPrice})
 }
 
 module.exports = {
@@ -78,4 +91,5 @@ module.exports = {
   cart,
   cartProcess,
   cartDelete,
+  cartOrder,
 }

@@ -2,7 +2,7 @@
 {% block mid %} 
 
 
-<form method="post" action="/myPage/{{user.id}}/cartDelete">
+<form id="cartForm" method="post">
   <table class="table table-striped text-center">
     <th>선택</th>
     <th>상품이름</th>
@@ -16,24 +16,38 @@
       <td><a href="/products/{{product.idproducts}}">{{ product.name }}</a></td>
       <td class="price text-end">{{ product.price }}</td>
       <td class="text-end">
-        <input class="quantity" type="number" min="1" value="{{ product.cartsQuantity }}" onclick="totalPrice()">
+        <input id="qty{{product.idcarts}}" class="quantity" type="number" min="1" value="{{ product.cartsQuantity }}" onclick="totalPrice()">
       </td>
     </tr>
     {% endfor %}
     <tr>
       <td></td>
       <td>주문한 총 금액</td>
-      <td class="text-end"><label id="totalPrice"></label></td>
+      <td name="totalPrice" class="text-end"><label id="totalPrice"></label></td>
     </tr>
   </table>
-  <button id="btnDelete" class="m-3 btn btn-danger" disabled="disabled">선택삭제</button>
+  <button id="btnDelete" class="m-3 btn btn-danger" disabled="disabled" onclick="del()">선택삭제</button><br>
+  <button id="btnOrder" class="m-3 btn btn-success" disabled="disabled" onclick="order()">선택주문</button>
 </form>
-<button id="btnOrder" class="m-3 btn btn-success" disabled="disabled">선택주문</button>
+
 <script>
+
+  const cartForm = document.querySelector('#cartForm');
+
+  const del = () => { cartForm.action = "/myPage/{{user.id}}/cartDelete"; }
+  const order = () => { cartForm.action = "/myPage/{{user.id}}/cartOrder"; }
+
   let sum = 0;
   function btnOnOff(box){
-    if(box.checked) sum++;
-    else            sum--;
+    const qty = document.querySelector(`#qty${box.name}`);
+
+    if(box.checked){
+      sum++;
+      qty.name = `qty${box.name}`;
+    } else{
+      sum--;
+      qty.name = '';
+    }
     if(sum > 0){
       document.querySelector('#btnDelete').disabled = false;
       document.querySelector('#btnOrder').disabled = false;
@@ -60,5 +74,5 @@
   }
   window.addEventListener('DOMContentLoaded', totalPrice);
 </script>
-{% endblock %}
 
+{% endblock %}
