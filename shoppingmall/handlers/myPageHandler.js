@@ -41,7 +41,7 @@ const cart = (req, res) => {
             UNION SELECT * FROM carts AS A RIGHT JOIN products AS B on A.productID = B.idproducts 
             WHERE A.customerID=?`;
   
-  values = [req.session.user.id];
+  let values = [req.session.user.id];
   pool.query(sql, values, (err, rows, field)=>{
     if(err) throw err;
     let totalPrice = 0;
@@ -72,16 +72,24 @@ const cartDelete = (req,res)=>{
 }
 
 const cartOrder = (req,res)=>{
-  let sql = 'SELECT * FROM carts WHERE idcarts = (?)';
-  let values = Object.keys(req.body).slice(0,Object.keys(req.body).length/2);
-  pool.query(sql, values, (err, rows, fields)=>{
+  pool.query(`SELECT address FROM customers WHERE id='${req.session.user.id}'`, (err, rows, fields)=>{
     if(err) throw err;
-    
+    const myAddress = rows[0].address;
+    let sql = `SELECT idcarts, name, price FROM carts AS A LEFT JOIN products AS B ON A.productID = B.idproducts WHERE idcarts IN ?
+            UNION SELECT idcarts, name, price FROM carts AS A RIGHT JOIN products AS B on A.productID = B.idproducts WHERE idcarts IN ?`;
+    let cartIds = Object.keys(req.body);
+    cartIds = [cartIds.slice(0,cartIds.length/2)];
+    values = [cartIds,cartIds];
+    pool.query(sql, values, (err, rows, fields)=>{
+      if(err) throw err;
+      rows.map(row => row.quantity = req.body['qty'+row.idcarts]);
+      res.render('order.html', {user:req.session.user, 
+                                products : rows,
+                                address : myAddress, 
+                                totalPrice : rows.reduce((sum, row)=>{return sum+=(row.price*row.quantity)},0),
+                                })
+    })
   })
-  res.render('order.html', {user:req.session.user, 
-                            products : [{},{},{}],
-                            address : "짭주소", 
-                            totalPrice : req.body.totalPrice})
 }
 
 module.exports = {

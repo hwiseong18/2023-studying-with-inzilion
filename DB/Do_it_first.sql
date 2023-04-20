@@ -13,7 +13,7 @@ CREATE TABLE customers (
       phone               VARCHAR(13),
       email               VARCHAR(40),
       pw                  VARCHAR(30) NOT NULL,
-      address             VARCHAR(50),
+      address             VARCHAR(50) NOT NULL,
       joinDate            TIMESTAMP NOT NULL,
       lastLogin           TIMESTAMP NOT NULL,
       grade               VARCHAR(10) NOT NULL,
