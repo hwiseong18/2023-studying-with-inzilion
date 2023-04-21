@@ -50,6 +50,14 @@ const productClass = (req, res)=>{
   }) 
 }
 
+const searchProcess = (req, res)=>{
+  let sql = `SELECT idproducts, name, price, DATE_FORMAT(registrationDate, '%y-%m-%d') AS date, seller From products WHERE name = ?`;
+  values = [req.body.search];
+  pool.query(sql, values, (err, rows, field)=>{
+    res.render('productsList.html', { products: rows, user : req.session.user});
+  }) 
+}
+
 
 module.exports =  {
   list,
@@ -57,4 +65,5 @@ module.exports =  {
   registrationProcess,
   productNum,
   productClass,
+  searchProcess,
 }
