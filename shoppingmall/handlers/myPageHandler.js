@@ -75,22 +75,37 @@ const cartOrder = (req,res)=>{
   pool.query(`SELECT address FROM customers WHERE id='${req.session.user.id}'`, (err, rows, fields)=>{
     if(err) throw err;
     const myAddress = rows[0].address;
-    let sql = `SELECT idcarts, name, price FROM carts AS A LEFT JOIN products AS B ON A.productID = B.idproducts WHERE idcarts IN ?
-            UNION SELECT idcarts, name, price FROM carts AS A RIGHT JOIN products AS B on A.productID = B.idproducts WHERE idcarts IN ?`;
+    let sql = `SELECT idcarts, idproducts, name, price, quantity FROM carts AS A LEFT JOIN products AS B ON A.productID = B.idproducts WHERE idcarts IN ?
+         UNION SELECT idcarts, idproducts, name, price, quantity FROM carts AS A RIGHT JOIN products AS B on A.productID = B.idproducts WHERE idcarts IN ?`;
     let cartIds = Object.keys(req.body);
     cartIds = [cartIds.slice(0,cartIds.length/2)];
     values = [cartIds,cartIds];
     pool.query(sql, values, (err, rows, fields)=>{
       if(err) throw err;
-      rows.map(row => row.quantity = req.body['qty'+row.idcarts]);
+      rows.map(row => row.cartQuantity = req.body['qty'+row.idcarts]);
+      req.session.user.order = rows;
       res.render('order.html', {user:req.session.user, 
                                 products : rows,
                                 address : myAddress, 
-                                totalPrice : rows.reduce((sum, row)=>{return sum+=(row.price*row.quantity)},0),
+                                totalPrice : rows.reduce((sum, row)=>{return sum+=(row.price*row.cartQuantity)},0),
                                 })
     })
   })
 }
+
+const cartPayment = (req,res)=>{
+  req.session.user.order.map(row => {
+    pool.query(`DELETE FROM carts WHERE idcarts = ${row.idcarts}`,(err,fields)=>{
+      if(err) throw err;
+      let sql = `UPDATE products SET quantity = ${row.quantity-row.cartQuantity} WHERE idproducts=${row.idproducts}`
+      pool.query(sql, (err, fields)=>{
+        if(err) throw err;
+      });
+    })
+  })
+  res.render('message.html', {message : '결제가 완료되었습니다', user : req.session.user});
+}
+
 
 module.exports = {
   index,
@@ -100,4 +115,5 @@ module.exports = {
   cartProcess,
   cartDelete,
   cartOrder,
+  cartPayment,
 }
